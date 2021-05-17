@@ -101,15 +101,15 @@
                         <configuration>
                             <sourceRoot>${project.build.directory}/generated-sources/cxf
                             </sourceRoot>
-                            <wsdlOptions>
+                            <!--<wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/price.wsdl</wsdl>
                                 </wsdlOption>
-                            </wsdlOptions>
+                            </wsdlOptions>-->
                         </configuration>
-                        <goals>
+                        <!--<goals>
                             <goal>wsdl2java</goal>
-                        </goals>
+                        </goals>-->
                     </execution>
                 </executions>
             </plugin>
