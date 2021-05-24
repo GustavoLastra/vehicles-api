@@ -78,9 +78,7 @@ public class CarService {
          * meaning the Maps service needs to be called each time for the address.
          */
 
-
         car.setLocation(mapsClient.getAddress(car.getLocation()));
-
 
         return car;
     }
@@ -112,12 +110,13 @@ public class CarService {
          * TODO: Find the car by ID from the `repository` if it exists.
          *   If it does not exist, throw a CarNotFoundException
          */
-
+        Optional<Car> foundCar = repository.findById(id);
+        Car car = foundCar.orElseThrow(CarNotFoundException::new);
 
         /**
          * TODO: Delete the car from the repository.
          */
-
+        repository.delete(car);
 
     }
 }
