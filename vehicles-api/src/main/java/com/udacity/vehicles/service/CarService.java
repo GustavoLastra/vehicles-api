@@ -22,12 +22,11 @@ import org.springframework.web.client.RestTemplate;
 public class CarService {
 
     private final CarRepository repository;
-    private final RestTemplate restTemplate;
     private final MapsClient mapsClient;
     private final PriceClient priceClient;
     private static final Logger log = LoggerFactory.getLogger(CarService.class);
 
-    public CarService(CarRepository repository, RestTemplate restTemplate, MapsClient mapsClient, PriceClient priceClient ) {
+    public CarService(CarRepository repository, MapsClient mapsClient, PriceClient priceClient ) {
         /**
          * TODO: Add the Maps and Pricing Web Clients you create
          *   in `VehiclesApiApplication` as arguments and set them here.
@@ -35,7 +34,6 @@ public class CarService {
         this.repository = repository;
         this.mapsClient = mapsClient;
         this.priceClient = priceClient;
-        this.restTemplate = restTemplate;
     }
 
     /**
