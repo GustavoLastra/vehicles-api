@@ -1,5 +1,6 @@
 package com.udacity.vehicles.domain.car;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.udacity.vehicles.domain.Condition;
 import com.udacity.vehicles.domain.Location;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * Declares the Car class, related variables and methods.
  */
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @EntityListeners(AuditingEntityListener.class)
 public class Car {
 

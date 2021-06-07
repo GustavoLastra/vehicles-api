@@ -2,8 +2,10 @@ package com.udacity.vehicles.api;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udacity.vehicles.domain.Condition;
 import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
@@ -28,6 +30,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 /**
@@ -115,6 +118,32 @@ public class CarControllerTest {
     }
 
     /**
+     * Tests for successful car update in the system
+     * @throws Exception when car creation fails in the system
+     */
+    @Test
+    public void updateCar() throws Exception {
+        Car car = getCar();
+        MvcResult result = mvc.perform(
+                post(new URI("/cars"))
+                        .content(json.write(car).getJson())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isCreated()).andReturn();;
+        Car updatedCar = getUpdatedCar();
+
+        String stringResponse = result.getResponse().getContentAsString();
+        Car savedCar = new ObjectMapper().readValue(stringResponse, Car.class);
+
+        mvc.perform(
+                put("/cars/{id}", savedCar.getId())
+                        .content(json.write(updatedCar).getJson())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+    }
+
+    /**
      * Tests the deletion of a single car by ID.
      * @throws Exception if the delete operation of a vehicle fails
      */
@@ -137,6 +166,7 @@ public class CarControllerTest {
      */
     private Car getCar() {
         Car car = new Car();
+        car.setCondition(Condition.USED);
         car.setLocation(new Location(40.730610, -73.935242));
         Details details = new Details();
         Manufacturer manufacturer = new Manufacturer(101, "Chevrolet");
@@ -151,7 +181,26 @@ public class CarControllerTest {
         details.setProductionYear(2018);
         details.setNumberOfDoors(4);
         car.setDetails(details);
-        car.setCondition(Condition.USED);
+        return car;
+    }
+
+    private Car getUpdatedCar() {
+        Car car = new Car();
+        car.setCondition(Condition.NEW);
+        car.setLocation(new Location(43.730610, -74.935242));
+        Details details = new Details();
+        Manufacturer manufacturer = new Manufacturer(101, "Chevrolet pro");
+        details.setManufacturer(manufacturer);
+        details.setModel("Impala");
+        details.setMileage(32280);
+        details.setExternalColor("white");
+        details.setBody("sedan pro");
+        details.setEngine("3.6L V6");
+        details.setFuelType("Gasoline");
+        details.setModelYear(2018);
+        details.setProductionYear(2018);
+        details.setNumberOfDoors(4);
+        car.setDetails(details);
         return car;
     }
 }
